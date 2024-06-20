@@ -184,4 +184,9 @@ table .text {
     padding: 10px;
     text-align: center;
   }
+tbody tr td:first-child::before{
+    content: attr(data-label);
+    
+  }
+
 }

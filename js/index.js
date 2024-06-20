@@ -14,11 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
       forecastData = forecastDays.map((forecastDay) => {
         const date = new Date(forecastDay.date);
         const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+        const formattedDate = `${date.getDate()}${date.toLocaleDateString(
+          "en-US",
+          { month: "short" }
+        )}`;
         return {
           dayName,
           current: currentTemp,
           forecast: forecastDay.day,
           location: locationName,
+          formattedDate,
         };
       });
 
@@ -44,10 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let theadContent = `<tr>`;
     let tbodyContent = `<tr>`;
 
-    data.forEach(({ dayName, current, forecast, location }, index) => {
-      theadContent += `<th class="col-md-3" scope="col" data-label="">${dayName}</th>`;
-      if (index === 0) {
-        tbodyContent += `<td class="text-center" data-label="${dayName}">
+    data.forEach(
+      ({ dayName, current, forecast, location, formattedDate }, index) => {
+        if (index === 0) {
+          theadContent += `<th class="col-md-3" scope="col" data-label="">${dayName}<span class="float-end">${formattedDate}</span></th>`;
+          tbodyContent += `<td class="text-center date" data-label="${dayName}\t${formattedDate}">
           <p class="pt-4 fs-2 text-primary fw-bolder fst-italic">${location}</p>
           <p class="currentTemp">${current.temp_c}°C</p>
           <img class="icon" src="https:${current.condition.icon}" alt="Current Weather Icon">
@@ -58,8 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <span><img class="me-2" src="imgs/images6.png" alt="Current Weather Icon">${current.wind_dir}</span>
           </p>
         </td>`;
-      } else {
-        tbodyContent += `<td data-label="${dayName}">
+        } else {
+          theadContent += `<th class="col-md-3" scope="col" data-label="">${dayName}</th>`;
+          tbodyContent += `<td data-label="${dayName}">
           <div class="d-flex justify-content-center align-items-center flex-column">
             <img class="icon" src="https:${forecast.condition.icon}" alt="Current Weather Icon">
             <p class="maxTemp">${forecast.maxtemp_c}°C</p>
@@ -67,8 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <p class="text">${forecast.condition.text}</p>
           </div>
         </td>`;
+        }
       }
-    });
+    );
 
     theadContent += `</tr>`;
     tbodyContent += `</tr>`;
@@ -99,11 +107,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const searchForecastData = forecastDays.map((forecastDay) => {
           const date = new Date(forecastDay.date);
           const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+          const formattedDate = `${date.getDate()}${date.toLocaleDateString(
+            "en-US",
+            { month: "short" }
+          )}`;
           return {
             dayName,
             current: currentTemp,
             forecast: forecastDay.day,
             location: locationName,
+            formattedDate,
           };
         });
 
@@ -121,5 +134,4 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchKey = document.getElementById("search").value;
     searchForecast(searchKey);
   });
-  
 });
